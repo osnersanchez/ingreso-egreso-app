@@ -20,15 +20,19 @@ export class AuthService {
 
   private userSubscription: Subscription = new Subscription();
 
-  constructor(private aFireAuth: AngularFireAuth,
+  constructor(
+    private aFireAuth: AngularFireAuth,
     private afDB: AngularFirestore,
     private router: Router,
-    private store: Store<AppState>) { }
+    private store: Store<AppState>
+  ) { }
 
 
   initAuthListener() {
     this.aFireAuth.authState.subscribe((fbUser: User) => {
       if (fbUser) {
+        console.log(fbUser);
+
         this.userSubscription = this.afDB.doc(`${fbUser.uid}/usuario`).valueChanges()
           .subscribe((userObj: any) => {
             console.log(userObj);
@@ -43,7 +47,7 @@ export class AuthService {
   }
 
   createUser(data) {
-    this.store.dispatch(new ActivarLoadingAction);
+    this.store.dispatch(new ActivarLoadingAction());
     this.aFireAuth.auth.createUserWithEmailAndPassword(data.email, data.password)
       .then(res => {
         let user: UserModel = {
@@ -54,23 +58,23 @@ export class AuthService {
         this.afDB.doc(`${user.uid}/usuario`)
           .set(user)
           .then(_ => {
-            this.store.dispatch(new DesactivarLoadingAction);
+            this.store.dispatch(new DesactivarLoadingAction());
             this.router.navigate(['/']);
           });
       }).catch(err => {
-        this.store.dispatch(new DesactivarLoadingAction);
+        this.store.dispatch(new DesactivarLoadingAction());
         // Swal('Error en registro', err.message, 'error');
       });
   }
 
   login(data) {
-    this.store.dispatch(new ActivarLoadingAction);
+    this.store.dispatch(new ActivarLoadingAction());
     this.aFireAuth.auth.signInWithEmailAndPassword(data.email, data.password)
       .then(res => {
-        this.store.dispatch(new DesactivarLoadingAction);
+        this.store.dispatch(new DesactivarLoadingAction());
         this.router.navigate(['/']);
       }).catch(err => {
-        this.store.dispatch(new DesactivarLoadingAction);
+        this.store.dispatch(new DesactivarLoadingAction());
         // Swal('Error en login', err.message, 'error');
       });
   }
@@ -78,6 +82,7 @@ export class AuthService {
   logout() {
     this.router.navigate(['/login']);
     this.aFireAuth.auth.signOut();
+    this.store.dispatch(new SetUser(new UserModel(null)))
   }
 
   isAuth() {

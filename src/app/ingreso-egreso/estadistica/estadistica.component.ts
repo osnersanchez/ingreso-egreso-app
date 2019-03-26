@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/reducers';
+import { SetItemsAction } from '../ingreso-egreso.actions';
 
 @Component({
   selector: 'app-estadistica',
