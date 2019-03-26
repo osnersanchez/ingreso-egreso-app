@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from 'src/app/reducers';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { IngresoEgresoService } from '../ingreso-egreso.service';
+import { ActivarLoadingAction, DesactivarLoadingAction } from 'src/app/shared/ui.actions';
 
 @Component({
   selector: 'app-detalle',
@@ -14,7 +16,8 @@ export class DetalleComponent implements OnInit, OnDestroy {
   public listItems = [];
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private isngresosEgresosSerive: IngresoEgresoService
   ) { }
 
   ngOnInit() {
@@ -30,6 +33,10 @@ export class DetalleComponent implements OnInit, OnDestroy {
 
   delete(uid: string) {
     console.log(uid);
+    this.store.dispatch(new ActivarLoadingAction())
+    this.isngresosEgresosSerive.deleteIngresoEgreso(uid)
+    .finally(() => this.store.dispatch(new DesactivarLoadingAction()))
+    // .then( res => {})
     
   }
 

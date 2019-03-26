@@ -44,14 +44,14 @@ export class IngresoEgresoService {
           })
         })
       }))
-      .subscribe((list:any[]) => {
+      .subscribe((list: any[]) => {
         this.store.dispatch(new SetItemsAction(list))
       })
   }
 
   createIngresoEgreso(ingresoEgreso) {
     // if (this.userUid)
-    
+
     return this.afDB.doc(`${this.userUid}/ingresos-egresos`)
       .collection('items').add({ ...ingresoEgreso })
     // .subscribe((userObj: any) => {
@@ -60,4 +60,10 @@ export class IngresoEgresoService {
 
     // })
   }
+
+  deleteIngresoEgreso(uid: string) {
+    return this.afDB.doc(`${this.userUid}/ingresos-egresos/items/${uid}`)
+      .delete()
+  }
+
 }
