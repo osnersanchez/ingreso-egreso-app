@@ -20,7 +20,7 @@ export class IngresoEgresoComponent implements OnInit {
     type: new FormControl("ingreso", Validators.required)
   });
 
-  public subscription: Subscription = new Subscription();
+  public subscriptions: Subscription = new Subscription();
   public loading = false;
 
   constructor(
@@ -29,24 +29,22 @@ export class IngresoEgresoComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.subscription = this.store.select('ui').subscribe( ui => this.loading = ui.isLoading);
+    this.subscriptions.add(this.store.select('ui').subscribe( ui => this.loading = ui.isLoading));
   }
 
   ngOnDestroy(){
-    this.subscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   save() {
     this.store.dispatch(new ActivarLoadingAction())
     console.log(new IngreEgreso(this.formAccount.value));
     this.ingresoEgresoService.createIngresoEgreso(new IngreEgreso(this.formAccount.value))
+    .finally(()=> this.store.dispatch(new DesactivarLoadingAction()))
     .then( val =>{
-      
       this.formAccount.reset({amount:0, type: "ingreso"});
-      this.store.dispatch(new DesactivarLoadingAction())
     })
     .catch(err => {
-      this.store.dispatch(new DesactivarLoadingAction())
         console.log(err);
       });
   }
