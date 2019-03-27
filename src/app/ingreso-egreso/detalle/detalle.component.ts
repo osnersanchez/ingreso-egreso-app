@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppState } from 'src/app/reducers';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IngresoEgresoService } from '../ingreso-egreso.service';
 import { ActivarLoadingAction, DesactivarLoadingAction } from 'src/app/shared/ui.actions';
+import { AppState } from '../ingreso-egreso.reducer';
 
 @Component({
   selector: 'app-detalle',

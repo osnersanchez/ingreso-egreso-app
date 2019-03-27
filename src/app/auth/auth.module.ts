@@ -4,6 +4,7 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AngularFireAuthModule } from "@angular/fire/auth";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
     declarations: [
@@ -13,6 +14,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
     imports: [
         CommonModule,
         FormsModule,
+        RouterModule,
         ReactiveFormsModule,
         AngularFireAuthModule,
     ]

@@ -13,13 +13,13 @@ import { IngresosEgresosReducer, StateIngresosEgresos } from '../ingreso-egreso/
 export interface AppState {
   ui: StateUI,
   user: StateAuth,
-  items: StateIngresosEgresos
+  // items: StateIngresosEgresos
 }
 
 export const reducers: ActionReducerMap<AppState> = {
   ui: uiReducer,
   user: AuthReducer,
-  items: IngresosEgresosReducer
+  // items: IngresosEgresosReducer
 };
 
 
