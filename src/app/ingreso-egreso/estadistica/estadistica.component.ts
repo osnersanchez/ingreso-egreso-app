@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/reducers';
-import { SetItemsAction } from '../ingreso-egreso.actions';
 import { Subscription } from 'rxjs';
+import { Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-estadistica',
@@ -15,6 +15,10 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
   public quantityEgreso = 0;
   public amountIngreso = 0;
   public amountEgreso = 0;
+
+  // Doughnut
+  public doughnutChartLabels: Label[] = ['Egresos','Ingresos'];
+  public doughnutChartData: number[] = [];
 
   private subscription: Subscription = new Subscription();
 
@@ -31,6 +35,7 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
         data.items.forEach(item => {
           item.type === 'ingreso' ? this.quantityIngreso++ : this.quantityEgreso++;
           item.type === 'ingreso' ? this.amountIngreso += item.amount : this.amountEgreso += item.amount;
+          this.doughnutChartData = [this.amountEgreso,this.amountIngreso]
         });
       }));
 

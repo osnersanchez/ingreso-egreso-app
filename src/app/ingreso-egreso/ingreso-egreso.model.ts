@@ -9,6 +9,6 @@ export class IngreEgreso {
         this.amount = obj && obj.amount || null;
         this.type = obj && obj.type || null;
         obj && obj.uid && (this.uid = obj && obj.uid);
-    }
+    }   
 
 }

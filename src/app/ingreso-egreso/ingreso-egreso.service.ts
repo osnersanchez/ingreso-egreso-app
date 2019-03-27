@@ -19,21 +19,22 @@ export class IngresoEgresoService {
     private afDB: AngularFirestore,
     private store: Store<AppState>
   ) {
-    this.subscription.add(this.store.select('user')
+    this.store.select('user')
       .pipe(filter(data => data.user && data.user.uid ? true : false))
       .subscribe(data => {
         this.userUid = data.user.uid
         this.ingrsoEgresosItems(data.user.uid);
-      }));
+      });
   }
 
   destroyEgresoListener() {
     this.subscription.unsubscribe();
 
   }
+  
 
   private ingrsoEgresosItems(uid: string) {
-    this.subscription.add(this.afDB.collection(`${uid}/ingresos-egresos/items`)
+    this.subscription = this.afDB.collection(`${uid}/ingresos-egresos/items`)
       .snapshotChanges()
       .pipe(map(list => {
         return list.map(val => {
@@ -45,7 +46,7 @@ export class IngresoEgresoService {
       }))
       .subscribe((list: any[]) => {
         this.store.dispatch(new SetItemsAction(list))
-      }));
+      });
   }
 
   createIngresoEgreso(ingresoEgreso) {
