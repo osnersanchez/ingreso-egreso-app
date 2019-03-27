@@ -12,29 +12,28 @@ import { IngreEgreso } from './ingreso-egreso.model';
 })
 export class IngresoEgresoService {
 
-  private userSubscription: Subscription = new Subscription();
+  private subscription: Subscription = new Subscription();
   private userUid: string = null;
 
   constructor(
     private afDB: AngularFirestore,
     private store: Store<AppState>
   ) {
-    this.store.select('user')
+    this.subscription.add(this.store.select('user')
       .pipe(filter(data => data.user && data.user.uid ? true : false))
       .subscribe(data => {
         this.userUid = data.user.uid
         this.ingrsoEgresosItems(data.user.uid);
-      })
+      }));
   }
 
-  initIngresoEgresoListener() {
-    // this.afDB.
-    // console.log(this.userUid);
+  destroyEgresoListener() {
+    this.subscription.unsubscribe();
 
   }
 
   private ingrsoEgresosItems(uid: string) {
-    this.afDB.collection(`${uid}/ingresos-egresos/items`)
+    this.subscription.add(this.afDB.collection(`${uid}/ingresos-egresos/items`)
       .snapshotChanges()
       .pipe(map(list => {
         return list.map(val => {
@@ -46,7 +45,7 @@ export class IngresoEgresoService {
       }))
       .subscribe((list: any[]) => {
         this.store.dispatch(new SetItemsAction(list))
-      })
+      }));
   }
 
   createIngresoEgreso(ingresoEgreso) {

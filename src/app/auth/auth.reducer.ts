@@ -1,5 +1,5 @@
 import { User } from "./user.model";
-import { acciones, SET_USER } from "./auth.actions";
+import { acciones, SET_USER, UNSET_USER } from "./auth.actions";
 
 export interface StateAuth  {
     user: User
@@ -14,7 +14,12 @@ export function AuthReducer(state = initState, accion: acciones): StateAuth {
         case SET_USER:
             
             return {
-                user: {...accion.user}
+                user: {...(<any>accion).user}
+            }
+        case UNSET_USER:
+            
+            return {
+                user: null
             }
     
         default:

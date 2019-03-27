@@ -8,8 +8,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AppState } from '../reducers';
 import { Store } from '@ngrx/store';
 import { ActivarLoadingAction, DesactivarLoadingAction } from '../shared/ui.actions';
-import { SetUser } from './auth.actions';
+import { SetUser, UnsetUser } from './auth.actions';
 import { Subscription } from 'rxjs';
+import { UsetItemsAction } from '../ingreso-egreso/ingreso-egreso.actions';
 
 // const Swal = require('sweetalert2')
 
@@ -82,7 +83,8 @@ export class AuthService {
   logout() {
     this.router.navigate(['/login']);
     this.aFireAuth.auth.signOut();
-    this.store.dispatch(new SetUser(new UserModel(null)))
+    this.store.dispatch(new UnsetUser());
+    this.store.dispatch(new UsetItemsAction());
   }
 
   isAuth() {
